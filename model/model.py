@@ -41,7 +41,7 @@ class Model:
         # Modo 1: conto i successori
         succ = nx.dfs_successors(self._graph, source)
         res = []
-        for s in succ:
+        for s in succ.values(): # itero sui valori associati alle chiavi
             res.extend(s)  # se la riga è un oggetto, mi aggiunge un oggetto, se il valore è una lista allora mi aggiunge tutti gli elementi della lista
         print("Size connessa con modo 1:", len(res))  # mi dà tutti i nodi della componente connessa. succ è un dizionario, per i successori: per ogni nodo ho un lista di nodi a cui posso arrivare associata
         # dovrei aggiungere 1 alla return
