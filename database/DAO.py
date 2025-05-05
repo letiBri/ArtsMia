@@ -8,17 +8,17 @@ class DAO:
     @staticmethod
     def getAllNodes():
         conn = DBConnect.get_connection()
+        cursor = conn.cursor(dictionary=True)
 
         result = []
 
-        cursor = conn.cursor(dictionary=True)
         query = """select *
                     from objects o"""
 
         cursor.execute(query)
 
         for row in cursor:
-            result.append(ArtObject(**row))  # posso fare così solo se i nomi delle colonne delle tabelle sono uguali agli attributi che ho definito per l'oggetto
+            result.append(ArtObject(**row))  # posso fare così solo se i nomi delle colonne delle tabelle sono uguali agli attributi che ho definito per l'oggetto ArtObject
 
         cursor.close()
         conn.close()
@@ -46,7 +46,7 @@ class DAO:
         cursor.close()
         conn.close()
 
-        if len(result) == 0:  # se non trova archi
+        if len(result) == 0:  # se non trova archi fra i due oggetti ArtObject
             return None
         return result
 
@@ -72,6 +72,6 @@ class DAO:
         cursor.close()
         conn.close()
 
-        if len(result) == 0:  # se non trova archi
+        if len(result) == 0:  # se non trova archi fra i due oggetti ArtObject
             return None
         return result

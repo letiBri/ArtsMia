@@ -4,4 +4,4 @@ mymodel = Model()
 mymodel.buildGraph()
 print("Numero nodi:", mymodel.getNumNodes(), "; Numero archi:", mymodel.getNumEdges())
 
-mymodel.getInfoConnessa(1234)
+print("Modo 4:", mymodel.getInfoConnessa(1234))

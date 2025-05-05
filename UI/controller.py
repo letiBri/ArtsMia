@@ -25,19 +25,20 @@ class Controller:
             self._view.update_page()
             return
         try:
-            idInput = int(txtInput)
+            idInput = int(txtInput)  # lo metto dentro un blocco try perchè questa operazione potrebbe scatenare un errore se non è davvero un numero sottoforma di stringa
         except ValueError:
             self._view.txt_result.controls.clear()
             self._view.txt_result.controls.append(ft.Text("Il valore inserito non è un numero!", color="red"))
             self._view.update_page()
             return
 
-        if not self._model.hasNode(idInput):
+        if not self._model.hasNode(idInput):  # controllo se il nodo esiste all'interno del grafo
             self._view.txt_result.controls.clear()
             self._view.txt_result.controls.append(ft.Text("L'id inserito non corrisponde a un node del grafo (non è un ogg del DB)!", color="red"))
             self._view.update_page()
             return
 
+        # se arrivo qui ho superato tutti i controlli e il nodo inserito in input appartiene al grafo
         sizeCompConnessa = self._model.getInfoConnessa(idInput)
 
         self._view.txt_result.controls.clear()
