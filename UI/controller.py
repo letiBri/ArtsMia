@@ -44,7 +44,8 @@ class Controller:
         self._view.txt_result.controls.clear()
         self._view.txt_result.controls.append(ft.Text(f"La componente connessa che contiene il nodo {self._model.getObjectFromId(idInput)} ha dimensione pari a a {sizeCompConnessa}"))
 
-        self._view._ddLun.disabled = False
+        # per il punto 2
+        self._view._ddLun.disabled = False  # abilito il dropdown e il bottone
         self._view._btnCerca.disabled = False
 
         myValues = range(2, sizeCompConnessa)
@@ -56,6 +57,7 @@ class Controller:
 
         self._view.update_page()
 
+    # per il punto 2
     def handleCerca(self, e):
         source = self._model.getObjectFromId(int(self._view._txtIdOggetto.value))  # a questo punto ho già eseguito i controlli sull'input
         lun = self._view._ddLun.value
@@ -65,7 +67,7 @@ class Controller:
             self._view.update_page()
             return
         lunInt = int(lun)
-        path, pesoTot = self._model.getOptPath(source, lunInt)
+        path, pesoTot = self._model.getOptPath(source, lunInt)  # metodo che chiama la ricorsione
         self._view.txt_result.controls.clear()
         self._view.txt_result.controls.append(ft.Text(f"Cammino che parte da {source} trovato con peso totale {pesoTot}"))
         for p in path:

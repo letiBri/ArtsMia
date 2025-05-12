@@ -12,6 +12,8 @@ class Model:
         self._idMap = {}  # creo la idMap per accedere agli oggetti tramite l'id
         for v in self._nodes:
             self._idMap[v.object_id] = v
+
+        # per la ricorsione
         self._bestPath = []
         self._bestCost = 0
 
@@ -59,6 +61,8 @@ class Model:
 
         # Modo 4: uso il metodo node_connected_component di nx
         conn = nx.node_connected_component(self._graph, source)  # mi trova direttamente i nodi della componente connessa partendo dal nodo source del grafo
+        print("Size connessa con modo 4: ", len(conn))
+
         return len(conn)  # funziona come return
 
     def hasNode(self, idInput):
@@ -67,7 +71,7 @@ class Model:
 
     # per il punto 2, metodo ricorsivo
     def getOptPath(self, source, lun):
-        self._bestPath = []  # riazzero le soluzioni ottime
+        self._bestPath = []  # azzero le soluzioni ottime
         self._bestCost = 0
         parziale = [source]  # conosciamo già il primo nodo
 
@@ -79,10 +83,11 @@ class Model:
         return self._bestPath, self._bestCost
 
     def _ricorsione(self, parziale, lun):
-        if len(parziale) == lun:  # allora parziale ha la lunghezza desiderata, condizione terminale
+        if len(parziale) == lun:
+            # allora parziale ha la lunghezza desiderata, condizione terminale
             # verifico se è una soluzione migliore e in ogni caso esco
             if self.costo(parziale) > self._bestCost:
-                self._bestPath = copy.deepcopy(parziale)  # perchè parziale viene cambiata ad ogni chiamata, quindi devo fare una copy
+                self._bestPath = copy.deepcopy(parziale)  # perchè parziale viene cambiata ad ogni chiamata, quindi devo fare una copy, una deepcopy anche se ci sono oggetti all'interno
                 self._bestCost = self.costo(parziale)
             return
         # se arrivo qui, allora parziale può ancora ammettere altri nodi
@@ -95,10 +100,8 @@ class Model:
     def costo(self, listObjects):
         totCosto = 0
         for i in range(0, len(listObjects) - 1):
-            totCosto += self._graph[listObjects[i]][listObjects[i + 1]]["weight"]  # accesso tramite i dizionari
+            totCosto += self._graph[listObjects[i]][listObjects[i + 1]]["weight"]  # accesso tramite i dizionari del grafo
         return totCosto
-
-
 
     def getNumNodes(self):
         return len(self._graph.nodes)

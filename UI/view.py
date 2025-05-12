@@ -13,8 +13,6 @@ class View(ft.UserControl):
         self._controller = None
         # graphical elements
         self._title = None
-        self.txt_name = None
-        self.btn_hello = None
         self.txt_result = None
         self.txt_container = None
 
@@ -38,7 +36,7 @@ class View(ft.UserControl):
         self._page.controls.append(row1)
 
         # row2
-        self._ddLun = ft.Dropdown(label="LUN", color="orange", border_color="orange", disabled=True)
+        self._ddLun = ft.Dropdown(label="Lun", color="orange", border_color="orange", disabled=True)
         self._btnCerca = ft.ElevatedButton(text="Cerca Oggetti", on_click=self._controller.handleCerca, bgcolor="orange", color="white", disabled=True)
         row2 = ft.Row([ft.Container(None, width=250), ft.Container(self._ddLun, width=250), ft.Container(self._btnCerca, width=250)], alignment=ft.MainAxisAlignment.CENTER)
         self._page.controls.append(row2)
