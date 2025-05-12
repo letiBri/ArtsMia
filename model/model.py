@@ -1,3 +1,5 @@
+import copy
+
 import networkx as nx
 
 from database.DAO import DAO
@@ -10,6 +12,8 @@ class Model:
         self._idMap = {}  # creo la idMap per accedere agli oggetti tramite l'id
         for v in self._nodes:
             self._idMap[v.object_id] = v
+        self._bestPath = []
+        self._bestCost = 0
 
     def buildGraph(self):
         self._graph.add_nodes_from(self._nodes)  # aggiungo i nodi al grafo tramite la lista che abbiamo appena importato dal DAO
@@ -60,6 +64,41 @@ class Model:
     def hasNode(self, idInput):
         # return self._idMap[idInput] in self._graph
         return idInput in self._idMap  # ritorna True se il nodo appartiene alla mappa, e quindi al grafo
+
+    # per il punto 2, metodo ricorsivo
+    def getOptPath(self, source, lun):
+        self._bestPath = []  # riazzero le soluzioni ottime
+        self._bestCost = 0
+        parziale = [source]  # conosciamo già il primo nodo
+
+        for n in nx.neighbors(self._graph, source):  # trovo tutti i vicini di source sul grafo
+            if parziale[-0].classification == n.classification:
+                parziale.append(n)  # estendo la sol parziale
+                self._ricorsione(parziale, lun)
+                parziale.pop()  # backtracking
+        return self._bestPath, self._bestCost
+
+    def _ricorsione(self, parziale, lun):
+        if len(parziale) == lun:  # allora parziale ha la lunghezza desiderata, condizione terminale
+            # verifico se è una soluzione migliore e in ogni caso esco
+            if self.costo(parziale) > self._bestCost:
+                self._bestPath = copy.deepcopy(parziale)  # perchè parziale viene cambiata ad ogni chiamata, quindi devo fare una copy
+                self._bestCost = self.costo(parziale)
+            return
+        # se arrivo qui, allora parziale può ancora ammettere altri nodi
+        for n in self._graph.neighbors(parziale[-1]):
+            if parziale[-0].classification == n.classification and n not in parziale:
+                parziale.append(n)
+                self._ricorsione(parziale, lun)
+                parziale.pop()
+
+    def costo(self, listObjects):
+        totCosto = 0
+        for i in range(0, len(listObjects) - 1):
+            totCosto += self._graph[listObjects[i]][listObjects[i + 1]]["weight"]  # accesso tramite i dizionari
+        return totCosto
+
+
 
     def getNumNodes(self):
         return len(self._graph.nodes)

@@ -43,4 +43,32 @@ class Controller:
 
         self._view.txt_result.controls.clear()
         self._view.txt_result.controls.append(ft.Text(f"La componente connessa che contiene il nodo {self._model.getObjectFromId(idInput)} ha dimensione pari a a {sizeCompConnessa}"))
+
+        self._view._ddLun.disabled = False
+        self._view._btnCerca.disabled = False
+
+        myValues = range(2, sizeCompConnessa)
+        # for v in myValues:
+        #     self._view._ddLun.options.append(ft.dropdown.Option(v))
+        # oppure posso fare così
+        myValuesDD = list(map(lambda x: ft.dropdown.Option(x), myValues))
+        self._view._ddLun.options = myValuesDD
+
         self._view.update_page()
+
+    def handleCerca(self, e):
+        source = self._model.getObjectFromId(int(self._view._txtIdOggetto.value))  # a questo punto ho già eseguito i controlli sull'input
+        lun = self._view._ddLun.value
+        if lun is None:
+            self._view.txt_result.controls.clear()
+            self._view.txt_result.controls.append(ft.Text("Attenzione: selezionare un parametro Lunghezza", color="red"))
+            self._view.update_page()
+            return
+        lunInt = int(lun)
+        path, pesoTot = self._model.getOptPath(source, lunInt)
+        self._view.txt_result.controls.clear()
+        self._view.txt_result.controls.append(ft.Text(f"Cammino che parte da {source} trovato con peso totale {pesoTot}"))
+        for p in path:
+            self._view.txt_result.controls.append(ft.Text(p))
+        self._view.update_page()
+        return
