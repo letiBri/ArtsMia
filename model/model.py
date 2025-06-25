@@ -76,7 +76,7 @@ class Model:
         parziale = [source]  # conosciamo già il primo nodo
 
         for n in nx.neighbors(self._graph, source):  # trovo tutti i vicini di source sul grafo
-            if parziale[-0].classification == n.classification:
+            if parziale[0].classification == n.classification:
                 parziale.append(n)  # estendo la sol parziale
                 self._ricorsione(parziale, lun)
                 parziale.pop()  # backtracking
@@ -92,7 +92,7 @@ class Model:
             return
         # se arrivo qui, allora parziale può ancora ammettere altri nodi
         for n in self._graph.neighbors(parziale[-1]):
-            if parziale[-0].classification == n.classification and n not in parziale:
+            if parziale[0].classification == n.classification and n not in parziale:
                 parziale.append(n)
                 self._ricorsione(parziale, lun)
                 parziale.pop()
